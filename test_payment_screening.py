@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """
 Simple test script for payment screening functionality.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import asyncio
 import json

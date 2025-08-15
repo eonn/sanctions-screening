@@ -1,5 +1,10 @@
 # Kafka Streaming Test Results
 
+**Author:** Eon (Himanshu Shekhar)  
+**Email:** himanshu.shekhar@example.com  
+**GitHub:** https://github.com/eon-himanshu  
+**Created:** 2024
+
 ## 🎯 **Test Summary**
 
 The Kafka streaming test for the sanctions screening platform was **SUCCESSFUL**! The system successfully demonstrated real-time payment message processing over Kafka with sanctions screening.

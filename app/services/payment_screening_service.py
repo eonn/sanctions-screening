@@ -1,5 +1,10 @@
 """
 Payment screening service for real-time payment processing.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import logging
 import time

@@ -1,3 +1,10 @@
+# Integration Summary
+
+**Author:** Eon (Himanshu Shekhar)  
+**Email:** himanshu.shekhar@example.com  
+**GitHub:** https://github.com/eon-himanshu  
+**Created:** 2024
+
 ## Summary of MQ and Kafka Integration
 
 ## What Has Been Added

@@ -1,5 +1,10 @@
 """
 Unit tests for the screening service.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import pytest
 from unittest.mock import Mock, patch

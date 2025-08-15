@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """
 Test script to verify the sanctions screening platform installation.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 
 import sys

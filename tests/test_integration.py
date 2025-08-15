@@ -1,5 +1,10 @@
 """
 Integration tests for the sanctions screening platform.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import pytest
 from fastapi.testclient import TestClient

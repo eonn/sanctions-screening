@@ -1,5 +1,10 @@
 """
 BERT-based NLP service for semantic similarity and name processing.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import logging
 import time

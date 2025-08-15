@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # Sanctions Screening Platform Startup Script
+# Author: Eon (Himanshu Shekhar)
+# Email: himanshu.shekhar@example.com
+# GitHub: https://github.com/eon-himanshu
+# Created: 2024
 
 echo "🚀 Starting Sanctions Screening Platform..."
 

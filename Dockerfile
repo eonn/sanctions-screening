@@ -1,3 +1,9 @@
+# Dockerfile for Sanctions Screening Platform
+# Author: Eon (Himanshu Shekhar)
+# Email: himanshu.shekhar@example.com
+# GitHub: https://github.com/eon-himanshu
+# Created: 2024
+
 # Use Python 3.9 slim image
 FROM python:3.9-slim
 

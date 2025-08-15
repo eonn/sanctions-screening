@@ -1,5 +1,10 @@
 # Sanctions Screening Platform - Deliverables
 
+**Author:** Eon (Himanshu Shekhar)  
+**Email:** himanshu.shekhar@example.com  
+**GitHub:** https://github.com/eon-himanshu  
+**Created:** 2024
+
 ## Project Overview
 
 A production-quality sanctions screening platform built in 3 days using state-of-the-art natural language processing (BERT), Fuzzy Logic for name similarity, and industry best practices.

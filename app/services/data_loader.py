@@ -1,5 +1,10 @@
 """
 Data loader service for populating sanctions lists.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import logging
 from typing import List, Dict, Any

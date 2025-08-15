@@ -1,5 +1,10 @@
 """
 Database connection and session management.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session

@@ -1,5 +1,10 @@
 """
 Fuzzy logic service for name similarity matching.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import logging
 from typing import List, Dict, Tuple, Optional

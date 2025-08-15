@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """
 Simple Kafka consumer for testing payment message processing.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import json
 import time

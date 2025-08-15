@@ -1,5 +1,10 @@
 # Payment Screening Test Results Summary
 
+**Author:** Eon (Himanshu Shekhar)  
+**Email:** himanshu.shekhar@example.com  
+**GitHub:** https://github.com/eon-himanshu  
+**Created:** 2024
+
 ## 🎯 **Test Results Overview**
 
 The sanctions screening platform with MQ and Kafka integration has been successfully tested and is working correctly!

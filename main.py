@@ -1,5 +1,10 @@
 """
 Main entry point for the Sanctions Screening Platform.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import os
 from fastapi import FastAPI

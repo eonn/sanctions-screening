@@ -2,6 +2,10 @@
 
 # Quick Test Script for Sanctions Screening Platform with Kafka
 # This script will help you test the complete setup
+# Author: Eon (Himanshu Shekhar)
+# Email: himanshu.shekhar@example.com
+# GitHub: https://github.com/eon-himanshu
+# Created: 2024
 
 echo "🎯 SANCTIONS SCREENING PLATFORM - QUICK TEST SCRIPT"
 echo "=================================================="

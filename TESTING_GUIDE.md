@@ -1,5 +1,10 @@
 # Complete Testing Guide for Sanctions Screening Platform with Kafka
 
+**Author:** Eon (Himanshu Shekhar)  
+**Email:** himanshu.shekhar@example.com  
+**GitHub:** https://github.com/eon-himanshu  
+**Created:** 2024
+
 ## 🎯 **Overview**
 
 This guide will walk you through testing the complete sanctions screening platform with Kafka streaming functionality. You'll learn how to start the infrastructure, run the application, and test real-time payment screening.

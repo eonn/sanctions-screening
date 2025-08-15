@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """
 Test script for payment screening with potentially sanctioned entities.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himansher
+Created: 2024
 """
 import asyncio
 import json

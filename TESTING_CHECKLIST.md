@@ -1,5 +1,10 @@
 # Testing Checklist for Sanctions Screening Platform
 
+**Author:** Eon (Himanshu Shekhar)  
+**Email:** himanshu.shekhar@example.com  
+**GitHub:** https://github.com/eon-himanshu  
+**Created:** 2024
+
 ## ✅ **Pre-Testing Checklist**
 
 - [ ] Docker is installed and running

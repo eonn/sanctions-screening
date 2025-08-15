@@ -1,5 +1,10 @@
 """
 Message Queue (MQ) service for handling payment messages.
+
+Author: Eon (Himanshu Shekhar)
+Email: himanshu.shekhar@example.com
+GitHub: https://github.com/eon-himanshu
+Created: 2024
 """
 import logging
 import json
