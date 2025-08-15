@@ -3,7 +3,7 @@
 Test script for payment screening with potentially sanctioned entities.
 
 Author: Eon (Himanshu Shekhar)
-Email: himanshu.shekhar@example.com
+Email: eonhimanshu@gmail.com
 GitHub: https://github.com/eon-himansher
 Created: 2024
 """

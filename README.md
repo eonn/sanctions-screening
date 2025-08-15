@@ -3,8 +3,8 @@
 A production-quality sanctions screening platform using state-of-the-art natural language processing (BERT), Fuzzy Logic for name similarity, and industry best practices. The platform ingests names/entities, screens against dynamic sanctions lists, and outputs robust match decisions with clear audit trails.
 
 **Author:** Eon (Himanshu Shekhar)  
-**Email:** himanshu.shekhar@example.com  
-**GitHub:** https://github.com/eon-himanshu  
+**Email:** eonhimanshu@gmail.com  
+**GitHub:** https://github.com/eonn/sanctions-screening  
 **Created:** 2024
 
 ## Features

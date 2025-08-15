@@ -2,8 +2,8 @@
 Message Queue (MQ) service for handling payment messages.
 
 Author: Eon (Himanshu Shekhar)
-Email: himanshu.shekhar@example.com
-GitHub: https://github.com/eon-himanshu
+Email: eonhimanshu@gmail.com
+GitHub: https://github.com/eonn/sanctions-screening
 Created: 2024
 """
 import logging

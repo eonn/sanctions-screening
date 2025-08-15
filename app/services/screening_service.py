@@ -2,8 +2,8 @@
 Main screening service that combines BERT and fuzzy logic for sanctions screening.
 
 Author: Eon (Himanshu Shekhar)
-Email: himanshu.shekhar@example.com
-GitHub: https://github.com/eon-himanshu
+Email: eonhimanshu@gmail.com
+GitHub: https://github.com/eonn/sanctions-screening
 Created: 2024
 """
 import logging

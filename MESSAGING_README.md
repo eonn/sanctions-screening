@@ -1,8 +1,8 @@
 # Real-Time Payment Screening with MQ and Kafka Integration
 
 **Author:** Eon (Himanshu Shekhar)  
-**Email:** himanshu.shekhar@example.com  
-**GitHub:** https://github.com/eon-himanshu  
+**Email:** eonhimanshu@gmail.com  
+**GitHub:** https://github.com/eonn/sanctions-screening  
 **Created:** 2024
 
 This document describes the real-time payment screening capabilities added to the Sanctions Screening Platform using Message Queue (MQ) and Kafka integration.

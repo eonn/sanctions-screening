@@ -1,8 +1,8 @@
 # Final Kafka Test Summary
 
 **Author:** Eon (Himanshu Shekhar)  
-**Email:** himanshu.shekhar@example.com  
-**GitHub:** https://github.com/eon-himanshu  
+**Email:** eonhimanshu@gmail.com  
+**GitHub:** https://github.com/eonn/sanctions-screening  
 **Created:** 2024
 
 ## 🎉 KAFKA STREAMING TEST COMPLETED SUCCESSFULLY!

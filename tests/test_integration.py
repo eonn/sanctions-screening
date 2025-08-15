@@ -2,8 +2,8 @@
 Integration tests for the sanctions screening platform.
 
 Author: Eon (Himanshu Shekhar)
-Email: himanshu.shekhar@example.com
-GitHub: https://github.com/eon-himanshu
+Email: eonhimanshu@gmail.com
+GitHub: https://github.com/eonn/sanctions-screening
 Created: 2024
 """
 import pytest
