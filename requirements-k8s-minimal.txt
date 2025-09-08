@@ -1,0 +1,19 @@
+# Minimal requirements for Kubernetes deployment
+# Author: Eon (Himanshu Shekhar)
+# Email: eonhimanshu@gmail.com
+# GitHub: https://github.com/eonn/sanctions-screening
+# Created: 2024
+
+# Core dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+python-multipart==0.0.6
+
+# Basic utilities
+requests==2.31.0
+python-dotenv==1.0.0
+
+# Logging
+structlog==23.2.0

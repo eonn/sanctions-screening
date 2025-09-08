@@ -1,0 +1,73 @@
+# Multi-stage Dockerfile for Kubernetes deployment
+# Author: Eon (Himanshu Shekhar)
+# Email: eonhimanshu@gmail.com
+# GitHub: https://github.com/eonn/sanctions-screening
+# Created: 2024
+
+# Build stage
+FROM python:3.11-slim as builder
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    libffi-dev \
+    libssl-dev \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements-k8s.txt .
+RUN pip install --no-cache-dir --user -r requirements-k8s.txt
+
+# Production stage
+FROM python:3.11-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Set working directory
+WORKDIR /app
+
+# Copy Python packages from builder stage
+COPY --from=builder /root/.local /root/.local
+RUN mkdir -p /home/appuser/.local && \
+    cp -r /root/.local/* /home/appuser/.local/ && \
+    chown -R appuser:appuser /home/appuser/.local
+
+# Set environment variables
+ENV PATH=/home/appuser/.local/bin:$PATH
+ENV PYTHONPATH=/app
+ENV TRANSFORMERS_CACHE=/app/cache
+ENV HF_HOME=/app/cache
+
+# Create necessary directories
+RUN mkdir -p app/static data logs cache && \
+    chown -R appuser:appuser /app
+
+# Copy application code
+COPY app/ ./app/
+COPY *.py ./
+
+# Switch to non-root user
+USER appuser
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Start the application
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

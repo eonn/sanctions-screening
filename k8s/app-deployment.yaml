@@ -1,0 +1,131 @@
+# Sanctions Screening Application Deployment
+# Author: Eon (Himanshu Shekhar)
+# Email: eonhimanshu@gmail.com
+# GitHub: https://github.com/eonn/sanctions-screening
+# Created: 2024
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sanctions-screening-app
+  namespace: sanctions-screening
+  labels:
+    app: sanctions-screening-app
+    component: application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sanctions-screening-app
+  template:
+    metadata:
+      labels:
+        app: sanctions-screening-app
+        component: application
+    spec:
+      containers:
+      - name: sanctions-screening-app
+        image: sanctions-screening:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+        envFrom:
+        - configMapRef:
+            name: sanctions-screening-config
+        - secretRef:
+            name: sanctions-screening-secret
+        volumeMounts:
+        - name: app-data
+          mountPath: /app/data
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+      volumes:
+      - name: app-data
+        persistentVolumeClaim:
+          claimName: app-data-pvc
+      initContainers:
+      - name: wait-for-db
+        image: postgres:13
+        command:
+        - sh
+        - -c
+        - |
+          until pg_isready -h postgres-service -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready!"
+      - name: wait-for-redis
+        image: redis:6-alpine
+        command:
+        - sh
+        - -c
+        - |
+          until redis-cli -h redis-service -p 6379 ping; do
+            echo "Waiting for Redis..."
+            sleep 2
+          done
+          echo "Redis is ready!"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sanctions-screening-service
+  namespace: sanctions-screening
+  labels:
+    app: sanctions-screening-app
+    component: application
+spec:
+  selector:
+    app: sanctions-screening-app
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http
+    protocol: TCP
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-data-pvc
+  namespace: sanctions-screening
+  labels:
+    app: sanctions-screening-app
+    component: application
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi

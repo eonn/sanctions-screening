@@ -11,7 +11,8 @@ import uuid
 from typing import Dict, Any
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.core.config import settings
@@ -43,8 +44,13 @@ async def lifespan(app: FastAPI):
     screening_service = ScreeningService()
     await screening_service.initialize()
     
-    # Initialize payment screening service
-    await payment_screening_service.initialize()
+    # Initialize payment screening service (optional - requires messaging services)
+    try:
+        await payment_screening_service.initialize()
+        logger.info("Payment screening service initialized successfully")
+    except Exception as e:
+        logger.warning(f"Payment screening service initialization failed: {e}")
+        logger.info("Continuing without payment screening service")
     
     yield
     
@@ -54,7 +60,10 @@ async def lifespan(app: FastAPI):
     if screening_service:
         await screening_service.cleanup()
     
-    await payment_screening_service.cleanup()
+    try:
+        await payment_screening_service.cleanup()
+    except Exception as e:
+        logger.warning(f"Payment screening service cleanup failed: {e}")
 
 # Create FastAPI app
 app = FastAPI(
@@ -63,6 +72,9 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Add CORS middleware
 app.add_middleware(
@@ -103,6 +115,25 @@ async def general_exception_handler(request: Request, exc: Exception):
             "detail": str(exc) if settings.debug else "An unexpected error occurred"
         }
     )
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    """Serve the main web interface."""
+    try:
+        with open("app/static/index.html", "r") as f:
+            return HTMLResponse(content=f.read())
+    except FileNotFoundError:
+        return HTMLResponse(content="""
+        <html>
+            <head><title>Sanctions Screening Platform</title></head>
+            <body>
+                <h1>Sanctions Screening Platform</h1>
+                <p>Platform is running successfully!</p>
+                <p><a href="/health">Health Check</a></p>
+                <p><a href="/docs">API Documentation</a></p>
+            </body>
+        </html>
+        """)
 
 @app.get("/health")
 async def health_check():

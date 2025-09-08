@@ -1,0 +1,35 @@
+# Kustomization file for Sanctions Screening Platform
+# Author: Eon (Himanshu Shekhar)
+# Email: eonhimanshu@gmail.com
+# GitHub: https://github.com/eonn/sanctions-screening
+# Created: 2024
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: sanctions-screening-platform
+
+namespace: sanctions-screening
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secret.yaml
+  - postgres-deployment.yaml
+  - redis-deployment.yaml
+  - rabbitmq-deployment.yaml
+  - kafka-deployment.yaml
+  - app-deployment.yaml
+  - nginx-deployment.yaml
+  - ingress.yaml
+
+commonLabels:
+  app.kubernetes.io/name: sanctions-screening-platform
+  app.kubernetes.io/version: "1.0.0"
+  app.kubernetes.io/managed-by: kustomize
+
+images:
+  - name: sanctions-screening
+    newTag: latest
+

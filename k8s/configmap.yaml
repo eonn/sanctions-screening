@@ -1,0 +1,65 @@
+# Kubernetes ConfigMap for Sanctions Screening Platform
+# Author: Eon (Himanshu Shekhar)
+# Email: eonhimanshu@gmail.com
+# GitHub: https://github.com/eonn/sanctions-screening
+# Created: 2024
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sanctions-screening-config
+  namespace: sanctions-screening
+  labels:
+    app: sanctions-screening-platform
+data:
+  # Application settings
+  DEBUG: "false"
+  HOST: "0.0.0.0"
+  PORT: "8000"
+  LOG_LEVEL: "INFO"
+  
+  # Database settings
+  DATABASE_URL: "postgresql://postgres:password@postgres-service:5432/sanctions_screening"
+  
+  # Redis settings
+  REDIS_URL: "redis://redis-service:6379"
+  
+  # BERT Model
+  BERT_MODEL_NAME: "sentence-transformers/all-MiniLM-L6-v2"
+  
+  # Matching thresholds
+  SIMILARITY_THRESHOLD: "0.85"
+  FUZZY_THRESHOLD: "0.8"
+  
+  # Sanctions data
+  SANCTIONS_DATA_DIR: "/app/data/sanctions"
+  
+  # Security
+  SECRET_KEY: "your-secret-key-change-in-production"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  
+  # Rate limiting
+  RATE_LIMIT_PER_MINUTE: "100"
+  
+  # Message Queue (RabbitMQ) settings
+  MQ_HOST: "rabbitmq-service"
+  MQ_PORT: "5672"
+  MQ_USERNAME: "guest"
+  MQ_PASSWORD: "guest"
+  MQ_VIRTUAL_HOST: "/"
+  MQ_EXCHANGE_NAME: "sanctions_screening"
+  MQ_PAYMENT_QUEUE: "payment_screening"
+  MQ_MESSAGE_TTL: "86400000"
+  MQ_MAX_QUEUE_LENGTH: "10000"
+  
+  # Kafka settings
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  KAFKA_PAYMENT_TOPIC: "payment_messages"
+  KAFKA_RESULT_TOPIC: "screening_results"
+  KAFKA_CONSUMER_GROUP: "sanctions-screening-group"
+  
+  # Risk thresholds
+  LOW_RISK_THRESHOLD: "0.3"
+  MEDIUM_RISK_THRESHOLD: "0.7"
+  HIGH_RISK_THRESHOLD: "0.9"
+

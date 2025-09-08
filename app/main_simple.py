@@ -11,7 +11,8 @@ import uuid
 from typing import Dict, Any
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.core.config import settings
@@ -53,6 +54,9 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Mount static files
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -89,6 +93,25 @@ async def general_exception_handler(request: Request, exc: Exception):
         }
     )
 
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    """Serve the main web interface."""
+    try:
+        with open("app/static/index.html", "r") as f:
+            return HTMLResponse(content=f.read())
+    except FileNotFoundError:
+        return HTMLResponse(content="""
+        <html>
+            <head><title>Sanctions Screening Platform</title></head>
+            <body>
+                <h1>Sanctions Screening Platform</h1>
+                <p>Platform is running successfully!</p>
+                <p><a href="/health">Health Check</a></p>
+                <p><a href="/docs">API Documentation</a></p>
+            </body>
+        </html>
+        """)
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
@@ -123,7 +146,7 @@ async def screen_payment(payment: PaymentMessage):
                 name=payment.sender_name,
                 entity_type="individual",
                 nationality=payment.sender_country
-            )
+            ))
         )
         
         recipient_screening = await screening_service.screen_entity_async(
@@ -131,7 +154,7 @@ async def screen_payment(payment: PaymentMessage):
                 name=payment.recipient_name,
                 entity_type="individual", 
                 nationality=payment.recipient_country
-            )
+            ))
         )
         
         # Calculate overall risk score

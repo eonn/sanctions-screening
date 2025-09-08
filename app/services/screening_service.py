@@ -67,7 +67,7 @@ class ScreeningService:
             )
             
             # Prepare response
-            response = self._prepare_screening_response(screening_result, matches)
+            response = self._prepare_screening_response(screening_result, matches, confidence, processing_time_ms)
             
             logger.info(
                 f"Screening completed for entity {entity.name}: "
@@ -95,11 +95,10 @@ class ScreeningService:
         # Create new entity
         entity = Entity(
             name=entity_data.name,
-            aliases=entity_data.aliases,
+            entity_type=entity_data.entity_type,
+            country=entity_data.country,
             date_of_birth=entity_data.date_of_birth,
-            nationality=entity_data.nationality,
-            passport_number=entity_data.passport_number,
-            entity_type=entity_data.entity_type
+            additional_info=entity_data.additional_info
         )
         
         db.add(entity)
@@ -110,7 +109,7 @@ class ScreeningService:
     
     def _get_active_sanctions_entries(self, db: Session) -> List[SanctionsList]:
         """Get all active sanctions entries."""
-        return db.query(SanctionsList).filter(SanctionsList.is_active == True).all()
+        return db.query(SanctionsList).all()
     
     def _perform_screening(
         self, 
@@ -183,15 +182,15 @@ class ScreeningService:
     def _check_exact_match(self, entity: Entity, entry: SanctionsList) -> bool:
         """Check for exact name match."""
         # Check main name
-        if entity.name.lower() == entry.entity_name.lower():
+        if entity.name.lower() == entry.name.lower():
             return True
         
         # Check aliases
-        entity_aliases = [alias.lower() for alias in (entity.aliases or [])]
-        entry_aliases = [alias.lower() for alias in (entry.aliases or [])]
+        entity_aliases = [alias.lower() for alias in (getattr(entity, 'aliases', None) or [])]
+        entry_aliases = [alias.lower() for alias in (getattr(entry, 'aliases', None) or [])]
         
         for entity_alias in entity_aliases:
-            if entity_alias in entry_aliases or entity_alias == entry.entity_name.lower():
+            if entity_alias in entry_aliases or entity_alias == entry.name.lower():
                 return True
         
         for entry_alias in entry_aliases:
@@ -204,14 +203,14 @@ class ScreeningService:
         """Calculate fuzzy matching score."""
         # Calculate fuzzy similarity for main name
         main_score = fuzzy_service.calculate_weighted_average_ratio(
-            entity.name, entry.entity_name
+            entity.name, entry.name
         )
         main_score = fuzzy_service.normalize_score(main_score)
         
         # Calculate fuzzy similarity for aliases
         alias_scores = []
-        entity_aliases = entity.aliases or []
-        entry_aliases = entry.aliases or []
+        entity_aliases = getattr(entity, 'aliases', None) or []
+        entry_aliases = getattr(entry, 'aliases', None) or []
         
         for entity_alias in entity_aliases:
             for entry_alias in entry_aliases:
@@ -226,12 +225,12 @@ class ScreeningService:
         """Calculate BERT similarity score."""
         try:
             # Calculate BERT similarity for main name
-            main_score = nlp_service.calculate_similarity(entity.name, entry.entity_name)
+            main_score = nlp_service.calculate_similarity(entity.name, entry.name)
             
-            # Calculate BERT similarity for aliases
+            # Calculate BERT similarity for aliases (if available)
             alias_scores = []
-            entity_aliases = entity.aliases or []
-            entry_aliases = entry.aliases or []
+            entity_aliases = getattr(entity, 'aliases', None) or []
+            entry_aliases = getattr(entry, 'aliases', None) or []
             
             for entity_alias in entity_aliases:
                 for entry_alias in entry_aliases:
@@ -280,9 +279,9 @@ class ScreeningService:
         """Create a match result dictionary."""
         return {
             'sanctions_entry_id': entry.id,
-            'entity_name': entry.entity_name,
+            'entity_name': entry.name,
             'source': entry.source,
-            'list_name': entry.list_name,
+            'list_name': entry.list_type or 'Unknown',
             'match_score': match_score,
             'match_type': match_type,
             'matched_fields': self._identify_matched_fields(entity, entry),
@@ -300,7 +299,7 @@ class ScreeningService:
         matched_fields = []
         
         # Check name match
-        if entity.name.lower() == entry.entity_name.lower():
+        if entity.name.lower() == entry.name.lower():
             matched_fields.append('name')
         
         # Check DOB match
@@ -375,13 +374,9 @@ class ScreeningService:
             entity_id=entity.id,
             overall_risk_score=risk_score,
             decision=decision,
-            confidence_score=confidence,
-            processing_time_ms=processing_time_ms,
-            screening_metadata={
-                'total_matches': len(matches),
-                'match_types': [match['match_type'] for match in matches],
-                'sources': list(set(match['source'] for match in matches))
-            }
+            status='approved' if decision == 'clear' else 'pending',
+            screening_type='single',
+            reference_id=None
         )
         
         db.add(screening_result)
@@ -408,20 +403,26 @@ class ScreeningService:
     def _prepare_screening_response(
         self, 
         screening_result: ScreeningResult,
-        matches: List[Dict[str, Any]]
+        matches: List[Dict[str, Any]],
+        confidence: float,
+        processing_time_ms: int
     ) -> Dict[str, Any]:
         """Prepare the final screening response."""
         return {
             'screening_id': screening_result.id,
             'entity_id': screening_result.entity_id,
             'entity_name': screening_result.entity.name,
-            'screening_date': screening_result.screening_date,
+            'screening_date': screening_result.created_at,
             'overall_risk_score': screening_result.overall_risk_score,
             'decision': screening_result.decision,
-            'confidence_score': screening_result.confidence_score,
-            'processing_time_ms': screening_result.processing_time_ms,
+            'confidence_score': confidence,  # Use the calculated confidence
+            'processing_time_ms': processing_time_ms,
             'matches': matches,
-            'metadata': screening_result.screening_metadata
+            'metadata': {
+                'total_matches': len(matches),
+                'match_types': [match['match_type'] for match in matches],
+                'sources': list(set(match['source'] for match in matches))
+            }
         }
 
 
@@ -480,8 +481,8 @@ async def get_sanctions_lists(self):
     from app.core.database import get_db
     db = next(get_db())
     try:
-        lists = db.query(SanctionsList).distinct(SanctionsList.list_name).all()
-        return [{'name': list.list_name, 'source': list.source} for list in lists]
+        lists = db.query(SanctionsList).distinct(SanctionsList.list_type).all()
+        return [{'name': list.list_type or 'Unknown', 'source': list.source} for list in lists]
     finally:
         db.close()
 

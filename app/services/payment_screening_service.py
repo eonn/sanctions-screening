@@ -12,7 +12,7 @@ import asyncio
 from typing import Dict, Any, Optional, Tuple
 from datetime import datetime
 from sqlalchemy.orm import Session
-from app.models.database import get_db
+from app.core.database import get_db
 from app.models.schemas import (
     PaymentMessage, 
     PaymentScreeningResult, 
